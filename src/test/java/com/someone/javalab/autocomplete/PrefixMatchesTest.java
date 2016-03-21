@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ *  This task is done to study purposes. Rights somehow distributed between lectors given task, textbooks, and me. 
  */
 package com.someone.javalab.autocomplete;
 
@@ -20,10 +18,12 @@ import static org.junit.Assert.*;
  */
 public class PrefixMatchesTest {
     PrefixMatches PMT;
+    PrefixMatches PM33;
     
     public PrefixMatchesTest() {
         PMT=new PrefixMatches();
         PMT.add("abc abcd abce abcde abcdef");
+        PM33=PMFactory.load();
     }
     
     @BeforeClass
@@ -54,6 +54,8 @@ public class PrefixMatchesTest {
         int expResult = 5;
         int result = instance.add(strings);
         assertEquals(expResult, result);
+        assertEquals(PM33.add("the"),0);
+        assertEquals(PM33.add("nochancethrerissuchword"),1);
     }
 
     /**
@@ -66,6 +68,7 @@ public class PrefixMatchesTest {
         int expResult = 5;
         int result = PMT.size();
         assertEquals(expResult, result);
+        assertEquals(PMFactory.total,PM33.size());
     }
 
     /**
@@ -79,6 +82,8 @@ public class PrefixMatchesTest {
         boolean expResult = true;
         boolean result = instance.delete(word);
         assertEquals(expResult, result);
+        assertEquals(true,PM33.delete("table"));
+        assertEquals(PM33.delete("nochancethrerissuchword"),false);
 
     }
 
@@ -93,6 +98,8 @@ public class PrefixMatchesTest {
         boolean expResult = true;
         boolean result = instance.contains(word);
         assertEquals(expResult, result);
+        assertEquals(PM33.contains("nochancethrerissuchword"),false);
+        assertEquals(PM33.contains("attention"),true);
     }
 
     /**

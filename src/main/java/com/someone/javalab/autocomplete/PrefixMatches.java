@@ -18,9 +18,8 @@ public class PrefixMatches {
         for(String s:strings){
             String[] words=s.split("\\s+");
             for(String word:words)
-                if (word.length()>1){
+                if (word.length()>2){
                     if (trie.add(new Tuple(word,word.length()))) res++;
-                    System.out.println(word);
                 }
                         
         }
@@ -45,5 +44,8 @@ public class PrefixMatches {
            else break;
         }
     return res;    
+    }
+    public Iterable<String> wordsWithPrefix(String pref){
+        return wordsWithPrefix(pref,3);
     }
 }
