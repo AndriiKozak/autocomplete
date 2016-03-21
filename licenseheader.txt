@@ -1,0 +1,7 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix} This task is done to study purposes. Rights somehow distributed between lectors given task, textbooks, and me. 
+<#if licenseLast??>
+${licenseLast}
+</#if>

@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ *  This task is done to study purposes. Rights somehow distributed between lectors given task, textbooks, and me. 
  */
 package com.someone.javalab.autocomplete;
 /**
