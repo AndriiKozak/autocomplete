@@ -5,8 +5,9 @@
  */
 package com.someone.javalab.autocomplete;
 
+import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 
 /**
@@ -30,6 +31,7 @@ public class RWayTrie implements Trie{
         }
         else return add(node.bornChild(postfix.charAt(0)),postfix.substring(1),weight,word);
     }
+    @Override
     public boolean contains(String word){
         return contains(root, word);
     }
@@ -38,6 +40,7 @@ public class RWayTrie implements Trie{
         if (postfix.isEmpty()) return (node.weight!=null);
         return contains(node.child(postfix.charAt(0)),postfix.substring(1));
     } 
+    @Override
     public boolean delete(String word){
         return delete(root,word);
     }
@@ -58,6 +61,7 @@ public class RWayTrie implements Trie{
     return result;
     }
     
+    @Override
     public int size(){
        return size(root);   
     }
@@ -67,37 +71,62 @@ public class RWayTrie implements Trie{
         for(int i=0;i<Node.R;i++) s+=size(node.childs[i]);
         return s;
     }
+    @Override
     public Iterable<String> words(){
-        List<String> result=new LinkedList();
-        Queue<Node> queue =new LinkedList(); 
-        Node node;
-        queue.add(root);
-        while (!queue.isEmpty()){
-         node=queue.remove();
-         if (node.weight!=null) result.add(node.word);
-         for(int i=0;i<Node.R;i++){
-             if (node.childs[i]!=null) queue.add(node.childs[i]);
-         }
-        }
-        return result;
+        return new Iterable<String>(){
+            @Override
+            public Iterator<String> iterator(){
+                return new WidthIterator(root);
+            }
+    };
     }
+    @Override
     public Iterable<String> wordsWithPrefix(String pref){
-        List<String> result=new LinkedList();
-        Queue<Node> queue =new LinkedList(); 
         Node node=root;
         while (!pref.isEmpty()){
             node=node.child(pref.charAt(0));
             pref=pref.substring(1);
-            if (node==null) return result;
-        }  
-        queue.add(node);
-        while (!queue.isEmpty()){
-         node=queue.remove();
-         if (node.weight!=null) result.add(node.word);
-         for(int i=0;i<Node.R;i++){
-             if (node.childs[i]!=null) queue.add(node.childs[i]);
-         }
-        }
-        return result;
+            if (node==null) return new LinkedList();
+        } 
+        final Node fnode=node;
+        return new Iterable<String>(){
+            @Override
+            public Iterator<String> iterator(){
+                return new WidthIterator(fnode);
+            }
+        };
     }
-}
+    static private class WidthIterator implements Iterator<String> {
+        private Queue<Node> queue =new LinkedList();
+        private String next; 
+        WidthIterator(Node node){
+            queue.add(node);
+            update();
+        }
+        @Override
+        public String next(){
+            String result;
+            if (next==null) throw new NoSuchElementException();
+                    else result=next;
+            next=null;
+            update();
+        return result;
+        }
+        @Override
+        public boolean hasNext(){
+            return !(next==null);
+        }
+        private void update(){
+           Node node;
+           while (!queue.isEmpty()){
+            node=queue.remove();
+            for(int i=0;i<Node.R;i++){
+                 if (node.childs[i]!=null) queue.add(node.childs[i]);
+                 if (node.weight!=null) {next=(node.word);break;}
+                } 
+        
+            }
+        }
+    }
+}        
+
