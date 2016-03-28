@@ -5,7 +5,7 @@ package com.someone.javalab.autocomplete;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  *
@@ -36,16 +36,44 @@ public class PrefixMatches {
     }
     
     public Iterable<String> wordsWithPrefix(String pref, int k){
-        List<String> res=new LinkedList();
-        if (pref.length()<2) return res;
-        Iterable<String> iWord = trie.wordsWithPrefix(pref);
-        for(String word:iWord){
-           if (word.length()-pref.length()<k) res.add(word);
-           else break;
+        if (pref.length()<2) return new LinkedList();
+        
+    return new Iterable<String>(){
+        @Override
+        public Iterator<String> iterator(){
+            return new PrefIterator(trie.wordsWithPrefix(pref), pref.length()+k);
         }
-    return res;    
+    };    
     }
     public Iterable<String> wordsWithPrefix(String pref){
         return wordsWithPrefix(pref,3);
+    }
+    static private class PrefIterator implements Iterator<String>{
+        Iterator<String> iterator;
+        int l;
+        String next;
+        PrefIterator(Iterable<String> iterable, int l){
+            this.l=l;
+            iterator=iterable.iterator();
+            update();
+        }
+        @Override
+        public boolean hasNext(){
+            return next!=null;
+        }
+        @Override
+        public String next(){
+            if (next==null) throw new NoSuchElementException();
+            String res=next;
+            update();
+            return res;
+        }
+        final void update(){
+            String possibleNext;
+            next=null;
+            if (iterator.hasNext()) {possibleNext=iterator.next();
+                if (possibleNext.length()<l) next=possibleNext;
+                }
+        }
     }
 }
