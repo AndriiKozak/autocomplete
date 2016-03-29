@@ -17,28 +17,28 @@ import static org.junit.Assert.*;
  * @author Andrii_Kozak1
  */
 public class PrefixMatchesTest {
+
     PrefixMatches PMT;
-    PrefixMatches PM33;
     
+
     public PrefixMatchesTest() {
-        PMT=new PrefixMatches();
-        PMT.add("abc abcd abce abcde abcdef");
-        PM33=PMFactory.load();
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
-        
+
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
+        PMT = new PrefixMatches();
+        PMT.add("abc abcd abce abcde abcdef");
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -54,8 +54,6 @@ public class PrefixMatchesTest {
         int expResult = 5;
         int result = instance.add(strings);
         assertEquals(expResult, result);
-        assertEquals(PM33.add("the"),0);
-        assertEquals(PM33.add("nochancethrerissuchword"),1);
     }
 
     /**
@@ -68,7 +66,6 @@ public class PrefixMatchesTest {
         int expResult = 5;
         int result = PMT.size();
         assertEquals(expResult, result);
-        assertEquals(PMFactory.total,PM33.size());
     }
 
     /**
@@ -82,10 +79,7 @@ public class PrefixMatchesTest {
         boolean expResult = true;
         boolean result = instance.delete(word);
         assertEquals(expResult, result);
-        assertEquals(true,PM33.delete("table"));
-        assertEquals(PM33.delete("nochancethrerissuchword"),false);
-
-    }
+        }
 
     /**
      * Test of contains method, of class PrefixMatches.
@@ -98,8 +92,6 @@ public class PrefixMatchesTest {
         boolean expResult = true;
         boolean result = instance.contains(word);
         assertEquals(expResult, result);
-        assertEquals(PM33.contains("nochancethrerissuchword"),false);
-        assertEquals(PM33.contains("attention"),true);
     }
 
     /**
@@ -116,11 +108,10 @@ public class PrefixMatchesTest {
         expResult.add("abcd");
         expResult.add("abce");
 
-        
-        Iterable<String> result = instance.wordsWithPrefix(pref,k);
-        for(String word:result){
-            assertEquals(word,expResult.remove(0));
+        Iterable<String> result = instance.wordsWithPrefix(pref, k);
+        for (String word : result) {
+            assertEquals(word, expResult.remove(0));
         }
     }
-    
+
 }

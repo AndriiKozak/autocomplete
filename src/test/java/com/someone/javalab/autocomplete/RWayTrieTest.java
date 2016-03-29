@@ -21,30 +21,33 @@ import static org.mockito.Mockito.when;
  * @author Andrii_Kozak1
  */
 public class RWayTrieTest {
+
     RWayTrie testTrie;
+
     public RWayTrieTest() {
-        testTrie=new RWayTrie();
-        
-        testTrie.add(new Tuple("abc",3));
-        testTrie.add(new Tuple("abcd",4));
-        testTrie.add(new Tuple("abce",4));
-        testTrie.add(new Tuple("abcde",5));
-        testTrie.add(new Tuple("abcdef",6));
-        
+       
+
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
+         testTrie = new RWayTrie();
+
+        testTrie.add(new Tuple("abc", 3));
+        testTrie.add(new Tuple("abcd", 4));
+        testTrie.add(new Tuple("abce", 4));
+        testTrie.add(new Tuple("abcde", 5));
+        testTrie.add(new Tuple("abcdef", 6));
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -53,40 +56,46 @@ public class RWayTrieTest {
      * Test of add method, of class RWayTrie.
      */
     @Test
-    public void testAdd() {
-        System.out.println("add");
+    public void testAddTupleMock() {
+        System.out.println("addTupleMock");
         Tuple mockTuple = mock(Tuple.class);
         when(mockTuple.getWord()).thenReturn("element");
         RWayTrie instance = new RWayTrie();
         boolean expResult = true;
         boolean result = instance.add(mockTuple);
         assertEquals(expResult, result);
-        verify(mockTuple,times(2)).getWord();
+        verify(mockTuple, times(2)).getWord();
         verify(mockTuple).getWeight();
-        
-    }
 
+    }
+    public void testAddTrue() {
+        boolean result=testTrie.add(new Tuple("ab",2));
+        assertEquals(result,true);
+    }
+    public void testAddFalse() {
+        boolean result=testTrie.add(new Tuple("abc",3));
+        assertEquals(result,false);
+    }
     /**
      * Test of contains method, of class RWayTrie.
      */
     @Test
-    public void testContains() {
+    public void testContainsTrue() {
         System.out.println("contains");
         String word = "cba";
         RWayTrie instance = testTrie;
         boolean expResult = false;
         boolean result = instance.contains(word);
         assertEquals(expResult, result);
-        assertEquals(true,instance.contains("abc"));
-        assertEquals(true,instance.contains("abcd"));
-        assertEquals(true,instance.contains("abce"));
-        assertEquals(true,instance.contains("abcde"));
-        assertEquals(true,instance.contains("abcdef"));
+        assertEquals(true, instance.contains("abc"));
+        assertEquals(true, instance.contains("abcd"));
+        assertEquals(true, instance.contains("abce"));
+        assertEquals(true, instance.contains("abcde"));
+        assertEquals(true, instance.contains("abcdef"));
     }
-
-    /**
-     * Test of delete method, of class RWayTrie.
-     */
+    public void testContainsFalse(){
+        assertEquals(false,testTrie.contains("Random Word"));
+    }
     @Test
     public void testDelete() {
         System.out.println("delete");
@@ -95,8 +104,8 @@ public class RWayTrieTest {
         boolean expResult = false;
         boolean result = instance.delete(word);
         assertEquals(expResult, result);
-        assertEquals(true,instance.delete("abc"));
-        testTrie.add(new Tuple("abc",3));
+        assertEquals(true, instance.delete("abc"));
+        testTrie.add(new Tuple("abc", 3));
     }
 
     /**
@@ -110,7 +119,7 @@ public class RWayTrieTest {
         int result = instance.size();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-       
+
     }
 
     /**
@@ -126,14 +135,12 @@ public class RWayTrieTest {
         expResult.add("abce");
         expResult.add("abcde");
         expResult.add("abcdef");
-        
-        
+
         Iterable<String> result = instance.words();
-        for(String word:result){
-            assertEquals(word,expResult.remove(0));
+        for (String word : result) {
+            assertEquals(word, expResult.remove(0));
         }
-        
-   
+
     }
 
     /**
@@ -143,18 +150,17 @@ public class RWayTrieTest {
     public void testWordsWithPrefix() {
         System.out.println("wordsWithPrefix");
         String pref = "abcd";
-        
+
         RWayTrie instance = new RWayTrie();
         List expResult = new LinkedList();
         expResult.add("abcd");
         expResult.add("abcde");
         expResult.add("abcdef");
-        
-        
+
         Iterable<String> result = instance.wordsWithPrefix(pref);
-        for(String word:result){
-            assertEquals(word,expResult.remove(0));
+        for (String word : result) {
+            assertEquals(word, expResult.remove(0));
         }
     }
-    
+
 }
